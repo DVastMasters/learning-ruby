@@ -1,1 +1,2 @@
-print "Hello World\n"
+puts "Hello World"
+print "Hello World"
