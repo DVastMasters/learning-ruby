@@ -49,13 +49,13 @@
 
 ## Integers: no decimal points https://ruby-doc.org/core-3.1.2/Integer.html
 # INTEGER / INTEGER = INTEGER
-    17    /    5    =    3
+    17    /    5    #=    3
 
 ## Floats: with decimal points https://ruby-doc.org/core-3.1.2/Float.html
 # INTEGER / FLOAT = FLOAT
-    17    /   5.0 =  3.4
+    17    /   5.0 #=  3.4
 
-   17.0   /   5   =  3.4
+   17.0   /   5   #=  3.4
 
 ## Converting Number Types
 # Integer to float
@@ -66,8 +66,8 @@
 'hi there 4.0'.to_f #=> 0.0
 
 # Float to integer
-13.0.to_if #=> 13
-13.9.to_if #=> 13 # Doesn't do any rounding
+13.0.to_f #=> 13
+13.9.to_f #=> 13 # Doesn't do any rounding
 
 # String to int
 '4 hi there'.to_f #=> 4
@@ -113,12 +113,12 @@
 "hello"[-1] #=> "o"
 
 ## Escape characters
-\\    #=> Need a backslash in your string?
-\b    #=> Backspace
-\r    #=> Carriage return, for those of you that love typewriters
-\n    #=> Newline. You'll likely use this one the most.
-\s    #=> Space
-\t    #=> Tab
+'\\'    #=> Need a backslash in your string?
+'\b'    #=> Backspace
+'\r'    #=> Carriage return, for those of you that love typewriters
+'\n'    #=> Newline. You'll likely use this one the most.
+'\s'   #=> Space
+'\t'    #=> Tab
 "\""  #=> Double quotation mark
 "\'"  #=> Single quotation mark
 
@@ -268,3 +268,6 @@ nil                      # nil literal
 
 # Acessing elementes
 {:dog => 'barks', :cat => 'meows', :pig => 'oinks'}[:cats] # "meows"
+
+
+
