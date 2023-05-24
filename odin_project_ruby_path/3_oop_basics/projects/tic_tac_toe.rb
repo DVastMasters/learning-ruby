@@ -8,68 +8,82 @@ class Player
 end
 
 class Board
-  @current_state = [[]]
+  @current_state = []
 
   def initialize
-    change_board_state(Array.new(9) { |i| i + 1 })
+    @current_state = Array.new(9) { |i| i + 1 }
   end
 
   def print_current_state
-    @current_state.each { |value| puts value.join('|') }
+    # Get marks
+    array_with_marks = @current_state.map { |value| value.is_a?(Player) ? value.player_mark : value }
+    array_with_marks.each_slice(3) { |slice| puts slice.join('|') }
   end
 
-  def mark_position(position, player_mark)
-    flatten_board = @current_state.flatten
-    flatten_board[position - 1].between?(1, 9)
-    flatten_board[position - 1] = player_mark
-    change_board_state(flatten_board)
+  def mark_position(position, player)
+    return false if @current_state[position - 1].is_a?(Player)
+
+    @current_state[position - 1] = player
     true
-  rescue ArgumentError
-    puts 'Position is already marked'
+  end
+
+  def player_win?(player)
+    # Rows
+    @current_state.each_slice(3) { |slice| return true if slice.uniq == [player] }
+
+    # Columns
+    4.times { |count| return true if @current_state[(count..).step(3)].uniq == [player] }
+
+    # Cross
+    [0, 2].each { |value| return true if @current_state[(value..).step(4)].uniq == [player]}
+
     false
-  end
-
-  def verify_win
-    flatten_board = @current_state.flatten
-    winner = sequence_equal?(flatten_board, 3)
-    puts "Player with #{winner} mark wins!!" unless winner.empty?
-
-    col = 1
-    flatten_board = @current_state.cycle(3).flat_map { |row| row[col] }
-    winner = sequence_equal?(flatten_board, 3)
-    puts "Player with #{winner} mark wins!!" unless winner.empty?
-  end
-
-  private
-
-  def sequence_equal?(flatten_values, sequence_length)
-    flatten_values.each_slice(sequence_length) { |slice| return slice[0] if slice.uniq.count == 1 }
-    ''
-  end
-
-  def change_board_state(flatten_array)
-    @current_state = flatten_array.each_slice(3).map { |slice| slice }
   end
 end
 
 class Game
-  @player1
-  @player2
+  @players
   @board
 
   def initialize(player1, player2, board)
-    @player1 = player1
-    @player2 = player2
+    @players = [player1, player2]
     @board = board
-    start_game
+  end
+
+  def loop_game
+    current_player = @players.sample
+    until @board.player_win?(current_player)
+      puts '----------------------------------'      
+      puts "The current player is #{current_player.player_name}"
+      @board.print_current_state
+      puts "What's your next move?"
+      player_move(current_player)
+      if @board.player_win?(current_player)
+        puts "The player #{player.player_name} wins the game!!!"
+        break
+      end
+      current_player = (@players - [current_player])[0]
+    end
+  end
+
+  def player_move(player)
+    loop do
+      pos = gets.match(/\d+/)[0]
+      marked = @board.mark_position(pos.to_i, player)
+      break if marked
+
+      puts 'Position already marked! Choose another.'
+    rescue NoMethodError
+      puts 'Please, input a number between 1-9.'
+      redo
+    end
   end
 end
 
-board = Board.new
+b = Board.new
+p1 = Player.new('R', 'X')
+p2 = Player.new('F', 'O')
 
-board.print_current_state
-p board.mark_position(3, 'X')
-p board.mark_position(1, 'X')
-p board.mark_position(2, 'X')
-board.print_current_state
-board.verify_win
+game = Game.new(p1, p2, b)
+
+game.loop_game
