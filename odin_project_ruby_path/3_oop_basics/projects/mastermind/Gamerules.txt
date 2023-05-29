@@ -1,0 +1,62 @@
+Two players: codemaker and codebreaker.
+
+1. The codemaker will chooses a code pattern of 4 colors peg. 
+2. The codebreaker has 12 tempts to break the code, guessing the four colors.
+3. Every round, the codebreaker choose 4 colors pegs:
+  3.1. If the codebreaker guess the color, but not the exact position, the codemaker
+       will give a white key peg.
+  3.2. If the codebreaker guess the color and the exact position, the codemaker will
+       give a red key peg.
+4. Game finish when:
+  4.1. No more attempts. Codemaker win.
+  4.2. The code is broken. Codebreaker win.
+
+
+
+Code:
+
+- Class Game: contains methods to provide a interface between the player 
+              and the game logic.
+
+- Class Board: encapsulate the board data and provide methods to manipulate 
+               the board.
+
+- Module BoardDisplay: methods to display the board logic data.               
+
+- Class BoardInteraction: contains the logic to manipulate the board. Includes 
+                          BoardDisplay.
+
+- Class 
+
+
+
+CODE = ['blue', 'red', 'yellow', 'yellow']
+WINNER = ''
+attempts = [
+  {
+    code_pegs: [],
+    key_pegs: []
+  }
+]
+ATTEMPT_LEFTS = 12
+
+LOOP UNTIL ATTEMPT_LEFTS == 0
+  ATTEMPT = ['red', 'red', 'red', 'red'] 
+
+  ATTEMPT IS EQUAL TO CODE?
+    Yes, so WINNER IS codebreaker. Break loop.
+
+  FOR EVERY ITEM IN ATTEMPT_1 DO:
+    VERIFICATION ONE: 
+      ITEM is equal to SAME_POSITION_IN_CODE? 
+        Yes, so give a RED KEY PEG.
+        No, so jump to verification TWO. 
+
+    VERIFICATION TWO: 
+      ITEM exists in ANY CODE POSITION? 
+        Yes, so give a WHITE KEY PEG.
+        No, so dont give any PEG
+
+END LOOP
+
+RETURN WINNER
