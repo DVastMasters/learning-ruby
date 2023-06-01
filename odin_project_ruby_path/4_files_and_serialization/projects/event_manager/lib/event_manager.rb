@@ -1,23 +1,10 @@
 require 'csv'
 require 'google/apis/civicinfo_v2'
 require 'erb'
+require 'time'
 
 def clean_zipcode(zipcode)
   zipcode.to_s.rjust(5, '0')[0..4]
-end
-
-def clean_phone_number(number)    
-  if number.nil?
-    nil.to_s.ljust(10, '0')
-  elsif number.length < 10
-    number.çjust(10, '0')
-  elsif number.length > 10
-    number[0..9]
-  elsif number[0] = '1'
-    number[1, -1]
-  else
-    number
-  end
 end
 
 def legislators_by_zipcode(zip)
@@ -45,10 +32,14 @@ def save_thank_you_letter(id, form_letter)
   end
 end
 
+def group_by_hour(reg_dates)
+  reg_dates.group_by(&:hour)
+end
+
 puts 'Event Manager Initialized!'
 
 contents = CSV.open(
-  '../event_attendees.csv', 
+  '../event_attendees.csv',
   headers: true,
   header_converters: :symbol
 )
@@ -61,11 +52,25 @@ contents.each do |row|
   name = row[:first_name]
   zipcode = clean_zipcode(row[:zipcode])
   legislators = legislators_by_zipcode(zipcode)
-  phone_number = clean_phone_number(row[:homephone])
-  puts phone_number
-
   form_letter = erb_template.result(binding)
 
   save_thank_you_letter(id, form_letter)
 end
 
+contents.rewind
+
+reg_hours = contents.each_with_object(Hash.new(0)) do |row, hs|
+  time = Time.strptime(row[:regdate], '%m/%d/%y %k:%M')
+  hs[time.hour] += 1
+end
+
+pp(reg_hours.sort { |a, b| b[1] <=> a[1] })
+
+contents.rewind
+
+week_days = contents.each_with_object(Hash.new(0)) do |row, hs|
+  time = Time.strptime(row[:regdate], '%m/%d/%y %k:%M')
+  hs[time.strftime('%A')] += 1
+end
+
+pp(week_days.sort { |a, b| b[1] <=> a[1] })
