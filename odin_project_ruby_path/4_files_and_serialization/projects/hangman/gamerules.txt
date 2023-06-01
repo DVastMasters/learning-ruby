@@ -1,0 +1,31 @@
+One random word between 5 and 12 characters long.
+
+The total player guesses will be the stick figure body parts.
+
+If the player guess a correct letter, display the letter in correct position:
+
+_ r o g r a _ _ i n g
+
+If the player guess a incorrect letter, cut a stick figure body part and
+display the letter in an other place.
+
+Endgame when:
+  1. The player correctly guess all word letters. (Win)
+  2. The stick figure doesn't has more body parts. (Lose) 
+
+Need to be possible to save the game and return to the same state where it was saved.
+
+
+
+
+Hangman class:
+  - Method to get a random word
+  - Method to get the user guess
+  - Method to verify if the user guess exists in the random word got
+
+Display module:
+  - Method to display the stick figure body
+  - Method do display the player correct guesses
+  - Method do display the player incorrect guesses
+
+
